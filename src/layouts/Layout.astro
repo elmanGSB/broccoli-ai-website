@@ -1,5 +1,6 @@
 ---
-// src/layouts/Layout.astro
+import '../styles/global.css';
+
 interface Props {
   title?: string;
   description?: string;
@@ -45,8 +46,6 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? 'https://broccoll
       rel="stylesheet"
     />
 
-    <!-- Global styles -->
-    <link rel="stylesheet" href="/src/styles/global.css" />
   </head>
   <body id="top">
     <!-- Skip navigation -->
