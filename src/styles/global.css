@@ -1335,6 +1335,8 @@ nav {
 @media (max-width: 1080px) {
   .curated-panel,
   .curated-panel.reverse { grid-template-columns: 1fr; }
+  /* Reverse panels: float copy to top on single-column layout */
+  .curated-panel.reverse .curated-copy { order: -1; }
   .curated-visual { min-height: 320px; }
   .results-header { grid-template-columns: 1fr; }
   .results-context { max-width: none; padding-top: 0; }
@@ -1345,14 +1347,13 @@ nav {
   nav { padding: 0 20px; }
   .nav-links { display: none; }
 
-  /* ── Hero: hide neural SVG, constrain visual height ── */
+  /* ── Hero: constrain visual height, SVG scales inside ── */
   .hero { grid-template-columns: 1fr; }
   .hero-text { padding: 60px 28px 20px; text-align: center; align-items: center; }
   .hero-cta-group { justify-content: center; }
-  .hero-visual { min-height: 280px; height: 280px; }
-  .neural-canvas { display: block; padding: 0; gap: 0; height: 280px; }
-  .neural-svg { display: none; }
-  .hero-food-core { width: 120px; height: 120px; }
+  .hero-visual { min-height: 320px; height: 320px; }
+  .neural-canvas { display: block; padding: 0; gap: 0; height: 320px; }
+  .hero-food-core { width: 110px; height: 110px; }
 
   /* ── Pillars ── */
   .pillars-section { padding: 72px 0 88px; }
@@ -1399,8 +1400,8 @@ nav {
 @media (max-width: 480px) {
   /* ── Hero ── */
   .hero-text { padding: 44px 20px 16px; }
-  .hero-visual { height: 220px; min-height: 220px; }
-  .neural-canvas { height: 220px; }
+  .hero-visual { height: 260px; min-height: 260px; }
+  .neural-canvas { height: 260px; }
   .hero-food-core { width: 96px; height: 96px; }
   .hero-subheadline { font-size: 15px; margin-bottom: 32px; }
   .hero-cta { padding: 13px 26px; font-size: 14px; }
