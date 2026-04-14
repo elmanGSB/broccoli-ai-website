@@ -474,7 +474,7 @@ nav {
   50% { opacity: 0.5; transform: scale(0.8); }
 }
 
-.sales-visual { display: grid; gap: 18px; padding: 22px; }
+.sales-visual { display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; padding: 22px; }
 
 .sales-summary {
   display: grid;
@@ -1339,27 +1339,47 @@ nav {
   .results-header { grid-template-columns: 1fr; }
   .results-context { max-width: none; padding-top: 0; }
 }
+
 @media (max-width: 768px) {
+  /* ── Nav ── */
   nav { padding: 0 20px; }
   .nav-links { display: none; }
+
+  /* ── Hero: hide neural SVG, constrain visual height ── */
   .hero { grid-template-columns: 1fr; }
   .hero-text { padding: 60px 28px 20px; text-align: center; align-items: center; }
   .hero-cta-group { justify-content: center; }
-  .hero-food-core {
-    width: 108px;
-    height: 108px;
-  }
-  .neural-canvas {
-    display: grid;
-    gap: 12px;
-    padding: 12px 20px 28px;
-  }
+  .hero-visual { min-height: 280px; height: 280px; }
+  .neural-canvas { display: block; padding: 0; gap: 0; height: 280px; }
+  .neural-svg { display: none; }
+  .hero-food-core { width: 120px; height: 120px; }
+
+  /* ── Pillars ── */
   .pillars-section { padding: 72px 0 88px; }
   .pillars-frame { width: min(100% - 32px, 1180px); }
   .curated-panel { padding: 28px; border-radius: 28px; gap: 28px; }
-  .supplier-orch { grid-template-columns: 1fr; }
-  .agent-brain { flex-direction: row; }
-  .sales-stats { grid-template-columns: repeat(3,1fr); }
+  .curated-visual { min-height: 0; overflow: hidden; }
+
+  /* ── Supplier: flatten orch to single column, hide decorative arrows ── */
+  .supplier-orch { grid-template-columns: 1fr; gap: 10px; }
+  .orch-arrow-line { display: none; }
+  .agent-brain { flex-direction: row; gap: 10px; padding: 8px 12px; }
+  .signal-lines { display: none; }
+
+  /* ── Sales: reduce pill width to prevent overflow ── */
+  .sales-stats { grid-template-columns: repeat(3, 1fr); }
+  .status-pill.cycle { width: 110px; padding: 0 10px; font-size: 10px; }
+
+  /* ── Knowledge: prevent typed-text breaking layout ── */
+  .chat-bubble { max-width: 100%; }
+
+  /* ── Payments: drop 4th col (badge) to prevent row overflow ── */
+  .invoice-row { grid-template-columns: 10px 1fr auto; gap: 8px; }
+  .invoice-badge { display: none; }
+  .invoice-badge.agent-on { display: inline-flex; }
+  .agent-action-panel { overflow: hidden; }
+
+  /* ── Results ── */
   .results-section { padding: 56px 0 64px; }
   .results-inner { width: min(100% - 32px, 1240px); }
   .results-grid { grid-template-columns: 1fr; }
@@ -1370,8 +1390,77 @@ nav {
   .results-card { min-height: 0; padding: 24px 22px; }
   .results-title { max-width: none; }
   .results-label { max-width: none; }
+
+  /* ── CTA ── */
   .closing-shell { padding: 32px 0 64px; }
   .section-closing { flex-direction: column; align-items: flex-start; padding: 24px; }
+}
+
+@media (max-width: 480px) {
+  /* ── Hero ── */
+  .hero-text { padding: 44px 20px 16px; }
+  .hero-visual { height: 220px; min-height: 220px; }
+  .neural-canvas { height: 220px; }
+  .hero-food-core { width: 96px; height: 96px; }
+  .hero-subheadline { font-size: 15px; margin-bottom: 32px; }
+  .hero-cta { padding: 13px 26px; font-size: 14px; }
+  .hero-cta-group { gap: 14px; }
+
+  /* ── Pillars ── */
+  .curated-panel { padding: 20px; border-radius: 24px; gap: 20px; }
+  .pillar-headline { font-size: 26px; letter-spacing: -0.8px; }
+  .pillar-body { font-size: 14.5px; }
+  .section-title { font-size: 36px; letter-spacing: -1.5px; }
+
+  /* ── Supplier ── */
+  .supplier-ui { padding: 16px; gap: 10px; }
+  .supplier-node { padding: 10px 12px; }
+  .sn-msg { display: none; }
+  .guardrail-bar { padding: 12px 14px; }
+  .guardrail-labels { font-size: 10px; }
+
+  /* ── Sales ── */
+  .sales-visual { padding: 16px; gap: 14px; }
+  /* 2-col grid so 3 stat chips don't overflow at 390px */
+  .sales-summary { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .sales-summary .summary-chip:last-child { grid-column: 1 / -1; }
+  .summary-chip { padding: 12px 14px; border-radius: 16px; }
+  .summary-chip strong { font-size: 20px; }
+  .sales-shell { border-radius: 20px; }
+  .sales-tabs { padding: 14px 14px 10px; gap: 8px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .sales-tab { padding: 8px 12px; font-size: 11px; white-space: nowrap; }
+  .sales-stream { padding: 12px 12px 14px; gap: 8px; }
+  .sales-row { grid-template-columns: auto 1fr; gap: 10px; padding: 12px 14px; }
+  .sales-row .status-pill { display: none; }
+  .sales-icon { width: 32px; height: 32px; border-radius: 10px; font-size: 14px; }
+
+  /* ── Knowledge ── */
+  .knowledge-ui { padding: 16px; gap: 10px; }
+  .chat-bubble { font-size: 13px; padding: 10px 12px; }
+  .answer-body { font-size: 12px; }
+  .source-tags { gap: 4px; }
+  .source-tag { font-size: 10px; padding: 4px 8px; }
+
+  /* ── Payments ── */
+  .payments-ui { padding: 16px; gap: 10px; }
+  .collection-meter { padding: 12px 14px; gap: 10px; }
+  .collection-ring,
+  .ring-svg { width: 48px; height: 48px; }
+  .invoice-list { gap: 6px; }
+  .invoice-row { padding: 10px 12px; gap: 6px; }
+  .invoice-amount { font-size: 12px; white-space: nowrap; }
+  .invoice-info strong { font-size: 12px; }
+  .invoice-info span { font-size: 10px; }
+  .agent-steps { padding: 8px 12px; gap: 5px; }
+  .agent-step { font-size: 11px; }
+
+  /* ── Results ── */
+  .results-number { letter-spacing: -3px; }
+  .results-card { padding: 20px 16px; }
+  .results-label { font-size: 16px; }
+
+  /* ── CTA ── */
+  .section-closing { border-radius: 22px; gap: 16px; }
 }
 
 /* ─── ACCESSIBILITY: REDUCED MOTION ─── */
