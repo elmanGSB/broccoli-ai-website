@@ -1,0 +1,77 @@
+---
+// src/layouts/Layout.astro
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'Broccolli AI — The AI Operating Layer for Food Distributors',
+  description = 'Broccolli AI deploys four specialized AI agents across sales, buying, knowledge, and collections so independent food distributors spend less time on admin and more time protecting margin.',
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? 'https://broccolli.ai');
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:site_name" content="Broccolli AI" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Global styles -->
+    <link rel="stylesheet" href="/src/styles/global.css" />
+  </head>
+  <body id="top">
+    <!-- Skip navigation -->
+    <a class="skip-nav" href="#main-content">Skip to main content</a>
+
+    <slot />
+  </body>
+</html>
+
+<style>
+  .skip-nav {
+    position: absolute;
+    top: -100%;
+    left: 0;
+    background: var(--sage);
+    color: var(--white);
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 9999;
+    border-radius: 0 0 6px 0;
+    text-decoration: none;
+    transition: top 0.2s;
+  }
+  .skip-nav:focus {
+    top: 0;
+  }
+</style>
