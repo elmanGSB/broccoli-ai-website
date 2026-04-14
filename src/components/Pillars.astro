@@ -1,0 +1,351 @@
+---
+// src/components/Pillars.astro
+---
+
+<!-- ─── PILLARS ─── -->
+<section class="pillars-section" id="pillars">
+  <div class="pillars-frame">
+    <div class="pillars-intro" id="network">
+      <div class="section-eyebrow">Operational Pillars</div>
+      <h2 class="section-title">Four AI agents. <em>One operating layer, shown through the work.</em></h2>
+      <div class="section-signal">
+        <span>Revenue surfaced</span>
+        <span>Negotiation executed</span>
+        <span>Grounded answers</span>
+        <span>Collections moving</span>
+      </div>
+    </div>
+
+    <div class="curated-stack">
+
+      <!-- ── PILLAR 1: SALES ── -->
+      <article class="curated-panel">
+        <div class="curated-copy">
+          <div class="pillar-header">
+            <div class="pillar-index">01</div>
+            <div class="pillar-kicker">Sales Empowerment</div>
+            <!-- Grammar fix: "agents handle" (not "agents handles") -->
+            <h3 class="pillar-headline">Your reps keep the relationship. Our agents handle the admin.</h3>
+          </div>
+          <p class="pillar-body">Orders, follow-ups, customer support, proposals, and hidden revenue cues move in the background so every stop gets more productive.</p>
+        </div>
+        <div class="curated-visual sales-visual" aria-hidden="true">
+          <div class="sales-summary">
+            <div class="summary-chip">
+              <strong>$182K</strong>
+              <span>Revenue generated</span>
+            </div>
+            <div class="summary-chip">
+              <strong>214</strong>
+              <span>Customer responses</span>
+            </div>
+            <div class="summary-chip">
+              <strong>02:14</strong>
+              <span>Average response time</span>
+            </div>
+          </div>
+          <div class="sales-shell">
+            <div class="sales-tabs">
+              <div class="sales-tab active">All (15)</div>
+              <div class="sales-tab">Email (8)</div>
+              <div class="sales-tab">SMS (5)</div>
+              <div class="sales-tab">Voice (2)</div>
+            </div>
+            <div class="sales-stream">
+              <div class="sales-row">
+                <div class="sales-icon">✉</div>
+                <div class="sales-label">
+                  <strong>Martinez Foods</strong>
+                  <span>PO request — 200 cases chicken breast by Thursday</span>
+                </div>
+                <div class="status-pill reading cycle cycle-two">
+                  <span>Reading</span>
+                  <span>Responding</span>
+                </div>
+              </div>
+              <div class="sales-row">
+                <div class="sales-icon">💬</div>
+                <div class="sales-label">
+                  <strong>El Rancho Grill</strong>
+                  <span>Price check on Roma tomatoes</span>
+                </div>
+                <div class="status-pill responding cycle cycle-two">
+                  <span>Responding</span>
+                  <span>Proposal drafted</span>
+                </div>
+              </div>
+              <div class="sales-row">
+                <div class="sales-icon">☎</div>
+                <div class="sales-label">
+                  <strong>Taqueria Sol</strong>
+                  <span>Reorder request and hidden expansion cue detected</span>
+                </div>
+                <div class="status-pill proposal cycle cycle-three">
+                  <span>Reading</span>
+                  <span>Responding</span>
+                  <span>Proposal drafted</span>
+                </div>
+              </div>
+              <div class="sales-row review">
+                <div class="sales-icon">☎</div>
+                <div class="sales-label">
+                  <strong>Casa Linda</strong>
+                  <span>Voicemail: adjust Friday delivery window</span>
+                </div>
+                <div class="status-pill warn">Needs review</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- ── PILLAR 2: SUPPLIERS ── -->
+      <article class="curated-panel reverse">
+        <div class="curated-visual" aria-hidden="true">
+          <div class="supplier-ui">
+            <div class="supplier-header">
+              <span class="supplier-header-label">Negotiation Engine</span>
+              <div class="agent-live-badge">
+                <div class="agent-live-dot"></div>
+                3 active
+              </div>
+            </div>
+
+            <!-- Buyer sets the guardrails -->
+            <div class="guardrail-bar">
+              <div class="guardrail-title">Buyer strategy · chicken breast / case</div>
+              <div class="guardrail-track">
+                <div class="guardrail-fill"></div>
+                <div class="guardrail-pip"></div>
+              </div>
+              <div class="guardrail-labels">
+                <span>Floor <strong>$17.80</strong></span>
+                <span>Target <strong>$18.05</strong></span>
+                <span>Ceiling <strong>$18.40</strong></span>
+              </div>
+            </div>
+
+            <!-- Orchestration: left suppliers | agent brain | right suppliers -->
+            <div class="supplier-orch">
+              <!-- Left supplier column -->
+              <div class="supplier-col">
+                <div class="supplier-node active s1">
+                  <div class="sn-name">Pacific Dist.</div>
+                  <div class="sn-price">Last buy: $18.24/case</div>
+                  <div class="sn-status negotiating">
+                    <span class="sn-dot"></span>Negotiating
+                  </div>
+                  <div class="sn-msg">"Opened at $17.92 with rebate ask. They replied — Thursday slot if volume holds."</div>
+                </div>
+                <div class="supplier-node active s2">
+                  <div class="sn-name">Valley Farms</div>
+                  <div class="sn-price">Last buy: $18.50/case</div>
+                  <div class="sn-status replied">
+                    <span class="sn-dot"></span>Replied
+                  </div>
+                  <div class="sn-msg">"Counter sent: bundle volume for $18.10. Awaiting response."</div>
+                </div>
+              </div>
+
+              <!-- Center: agent brain -->
+              <div class="agent-brain">
+                <div class="orch-arrow-line"></div>
+                <div class="brain-orb">
+                  <span class="brain-icon">🧠</span>
+                </div>
+                <div class="brain-label">Broccolli<br>Agent</div>
+                <div class="orch-arrow-line"></div>
+              </div>
+
+              <!-- Right supplier column -->
+              <div class="supplier-col">
+                <div class="supplier-node s3">
+                  <div class="sn-name">GreenLeaf Co</div>
+                  <div class="sn-price">Last buy: $19.25/case</div>
+                  <div class="sn-status fallback">
+                    <span class="sn-dot"></span>Fallback held
+                  </div>
+                </div>
+                <div class="po-outcome">
+                  <div class="po-title">PO Assembling</div>
+                  <div class="po-detail">Pacific preferred at <strong>$17.92</strong> with rebate window. PO drafted for buyer approval.</div>
+                  <div class="po-check">✓ Within buyer guardrails</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="curated-copy">
+          <div class="pillar-header">
+            <div class="pillar-index">02</div>
+            <div class="pillar-kicker">Supplier Negotiations</div>
+            <h3 class="pillar-headline">Your buyers choose the strategy. Broccolli handles the grind.</h3>
+          </div>
+          <p class="pillar-body">Pricing changes, rebate opportunities, and supplier movement stay monitored so buyers walk in with leverage already built.</p>
+        </div>
+      </article>
+
+      <!-- ── PILLAR 3: KNOWLEDGE ── -->
+      <article class="curated-panel">
+        <div class="curated-copy">
+          <div class="pillar-header">
+            <div class="pillar-index">03</div>
+            <div class="pillar-kicker">Knowledge Capture</div>
+            <h3 class="pillar-headline">Ask the operation. Get the answer.</h3>
+          </div>
+          <p class="pillar-body">Broccolli AI turns route notes, pricing history, supplier context, and account knowledge into a connected brain the whole team can use instantly.</p>
+        </div>
+        <div class="curated-visual" aria-hidden="true">
+          <div class="knowledge-ui">
+            <div class="knowledge-header">
+              <span class="knowledge-header-label">Knowledge Base</span>
+              <div class="agent-live-badge">
+                <div class="agent-live-dot"></div>
+                Grounded
+              </div>
+            </div>
+            <div class="knowledge-chat">
+
+              <!-- User question with typing animation -->
+              <div class="chat-question">
+                <div class="chat-avatar user">👤</div>
+                <div class="chat-bubble user-bubble">
+                  <div class="typed-text">What did we charge Martinez Foods last quarter?</div>
+                </div>
+              </div>
+
+              <!-- Thinking state -->
+              <div class="thinking-state">
+                <div class="think-dots">
+                  <div class="think-dot"></div>
+                  <div class="think-dot"></div>
+                  <div class="think-dot"></div>
+                </div>
+                Searching route notes, pricing history, account records...
+              </div>
+
+              <!-- Answer appears -->
+              <div class="chat-question chat-answer" style="display:flex;">
+                <div class="chat-avatar agent">AI</div>
+                <div class="chat-bubble agent-bubble">
+                  <div class="answer-headline">$2.38/lb avg across Q4 — 4% below list price.</div>
+                  <div class="answer-body">Martinez switched from a competitor in October after you matched their bulk rate at the San Antonio food expo.</div>
+                  <div class="source-tags">
+                    <span class="source-tag">📍 SA Food Expo notes · Oct 2025</span>
+                    <span class="source-tag">📊 Q4 pricing history</span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- ── PILLAR 4: PAYMENTS ── -->
+      <article class="curated-panel reverse">
+        <div class="curated-visual" aria-hidden="true">
+          <div class="payments-ui">
+            <div class="payments-header">
+              <span class="payments-header-label">Collections — Agent Scan</span>
+              <div class="agent-live-badge">
+                <div class="agent-live-dot"></div>
+                Scanning
+              </div>
+            </div>
+
+            <!-- Collection meter -->
+            <div class="collection-meter">
+              <div class="collection-ring">
+                <svg class="ring-svg" viewBox="0 0 56 56">
+                  <circle class="ring-bg" cx="28" cy="28" r="22"/>
+                  <circle class="ring-fill" cx="28" cy="28" r="22"/>
+                </svg>
+                <div class="ring-label">78%</div>
+              </div>
+              <div class="collection-info">
+                <strong>Collection rate on cadence</strong>
+                <span>Up from 54% before automated follow-up</span>
+              </div>
+            </div>
+
+            <!-- Invoice list — agent scans each row in sequence -->
+            <div class="invoice-list">
+              <div class="invoice-row">
+                <div class="invoice-dot"></div>
+                <div class="invoice-info">
+                  <strong>Martinez Foods · #4821</strong>
+                  <span>Current cadence · on schedule</span>
+                </div>
+                <div class="invoice-amount">$3,240</div>
+                <div class="invoice-badge current">On track</div>
+              </div>
+              <div class="invoice-row flagged">
+                <div class="invoice-dot late"></div>
+                <div class="invoice-info">
+                  <strong>El Rancho · #4789</strong>
+                  <span>Late detected — agent engaged</span>
+                </div>
+                <div class="invoice-amount">$1,870</div>
+                <div class="invoice-badge agent-on">Agent on</div>
+              </div>
+              <div class="invoice-row">
+                <div class="invoice-dot warn"></div>
+                <div class="invoice-info">
+                  <strong>Casa Linda · #4802</strong>
+                  <span>Reminder #2 scheduled</span>
+                </div>
+                <div class="invoice-amount">$2,150</div>
+                <div class="invoice-badge reminder">Following up</div>
+              </div>
+              <div class="invoice-row">
+                <div class="invoice-dot"></div>
+                <div class="invoice-info">
+                  <strong>Pueblo Market · #4756</strong>
+                  <span>Recovered via auto follow-up</span>
+                </div>
+                <div class="invoice-amount">$4,680</div>
+                <div class="invoice-badge collected">Collected ✓</div>
+              </div>
+            </div>
+
+            <!-- Agent action panel — rises after El Rancho is flagged -->
+            <div class="agent-action-panel">
+              <div class="panel-header">
+                <div class="panel-header-label">
+                  <div class="panel-header-dot"></div>
+                  Agent taking action
+                </div>
+                <div class="panel-account">El Rancho · #4789</div>
+              </div>
+              <div class="agent-steps">
+                <div class="agent-step step-done">
+                  <div class="step-check">✓</div>
+                  Read account history and past payment patterns
+                </div>
+                <div class="agent-step step-done">
+                  <div class="step-check">✓</div>
+                  Drafted personalised follow-up message
+                </div>
+                <div class="agent-step">
+                  <div class="step-check">→</div>
+                  Sending follow-up — no manual intervention needed
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="curated-copy">
+          <div class="pillar-header">
+            <div class="pillar-index">04</div>
+            <div class="pillar-kicker">Payments</div>
+            <h3 class="pillar-headline">Keep Collections moving without the chase.</h3>
+          </div>
+          <p class="pillar-body">The payment cadence runs on schedule so cash does not wait on manual follow-up.</p>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
