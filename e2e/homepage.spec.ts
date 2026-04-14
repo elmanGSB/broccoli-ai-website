@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 test.beforeEach(async ({ page }) => {
-  await page.goto('http://localhost:4321');
+  await page.goto('/');
 });
 
 test('page has correct title', async ({ page }) => {
@@ -37,7 +37,7 @@ test('food images are local (not Wikimedia)', async ({ page }) => {
   const count = await images.count();
   for (let i = 0; i < count; i++) {
     const src = await images.nth(i).getAttribute('src');
-    expect(src).not.toContain('wikimedia.org');
+    expect(src).toMatch(/^\//);
   }
 });
 
