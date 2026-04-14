@@ -1347,12 +1347,14 @@ nav {
   nav { padding: 0 20px; }
   .nav-links { display: none; }
 
-  /* ── Hero: constrain visual height, SVG scales inside ── */
+  /* ── Hero: constrain visual height, zoom SVG into brain center ── */
   .hero { grid-template-columns: 1fr; }
   .hero-text { padding: 60px 28px 20px; text-align: center; align-items: center; }
   .hero-cta-group { justify-content: center; }
-  .hero-visual { min-height: 320px; height: 320px; }
-  .neural-canvas { display: block; padding: 0; gap: 0; height: 320px; }
+  .hero-visual { min-height: 360px; height: 360px; }
+  .neural-canvas { display: block; padding: 0; gap: 0; height: 360px; overflow: hidden; }
+  /* Scale SVG 2× from brain center so connections are legible at mobile size */
+  .neural-svg { transform: scale(2); transform-origin: 50% 47.15%; }
   .hero-food-core { width: 110px; height: 110px; }
 
   /* ── Pillars ── */
@@ -1400,8 +1402,8 @@ nav {
 @media (max-width: 480px) {
   /* ── Hero ── */
   .hero-text { padding: 44px 20px 16px; }
-  .hero-visual { height: 260px; min-height: 260px; }
-  .neural-canvas { height: 260px; }
+  .hero-visual { height: 300px; min-height: 300px; }
+  .neural-canvas { height: 300px; }
   .hero-food-core { width: 96px; height: 96px; }
   .hero-subheadline { font-size: 15px; margin-bottom: 32px; }
   .hero-cta { padding: 13px 26px; font-size: 14px; }
