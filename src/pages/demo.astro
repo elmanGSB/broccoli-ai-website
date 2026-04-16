@@ -14,6 +14,16 @@ const FORMSPREE_URL = 'https://formspree.io/f/mdayavqr';
 
   <main id="main-content" class="demo-main">
 
+    <div class="progress-track" id="progress-track">
+      <div class="progress-dot active" data-step="1"></div>
+      <div class="progress-connector"></div>
+      <div class="progress-dot" data-step="2"></div>
+      <div class="progress-connector"></div>
+      <div class="progress-dot" data-step="3"></div>
+      <div class="progress-connector"></div>
+      <div class="progress-dot" data-step="4"></div>
+    </div>
+
     <!-- ── STEP 1: Contact form ── -->
     <section id="step1" class="demo-step" style="display:flex;">
       <div class="demo-inner">
@@ -50,16 +60,15 @@ const FORMSPREE_URL = 'https://formspree.io/f/mdayavqr';
             </div>
 
             <div class="field-group field-full">
-              <label for="size">Company size</label>
-              <select id="size" name="size">
-                <option value="">Select number of employees</option>
-                <option value="1-10">1–10 employees</option>
-                <option value="11-50">11–50 employees</option>
-                <option value="51-200">51–200 employees</option>
-                <option value="201-500">201–500 employees</option>
-                <option value="500+">500+ employees</option>
+              <label for="company_size">Company size</label>
+              <select id="company_size" name="company_size" required>
+                <option value="" disabled selected>Select size</option>
+                <option value="solo">Solo</option>
+                <option value="2-10">2–10 drivers</option>
+                <option value="11-50">11–50 drivers</option>
+                <option value="50+">50+ drivers</option>
               </select>
-              <span class="field-error" id="size-err">Please select your company size</span>
+              <span class="field-error" id="company_size-err">Please select your company size</span>
             </div>
           </div>
 
@@ -319,6 +328,36 @@ const FORMSPREE_URL = 'https://formspree.io/f/mdayavqr';
 /* ── Demo Main ── */
 .demo-main {
   background: var(--cream);
+}
+
+/* ── Progress Track ── */
+.progress-track {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  padding: 24px 0 8px;
+}
+
+.progress-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #d4d4d4;
+  transition: background 0.3s, box-shadow 0.3s;
+  flex-shrink: 0;
+}
+
+.progress-dot.active {
+  background: #6b8f71;
+  box-shadow: 0 0 0 4px rgba(107, 143, 113, 0.25);
+}
+
+.progress-connector {
+  width: 32px;
+  height: 2px;
+  background: #d4d4d4;
+  flex-shrink: 0;
 }
 
 /* ── Step container ── */
@@ -852,6 +891,10 @@ const FORMSPREE_URL = 'https://formspree.io/f/mdayavqr';
         el.style.animation = '';
       }
     });
+    // Update progress dots
+    document.querySelectorAll('.progress-dot').forEach(dot => {
+      dot.classList.toggle('active', parseInt(dot.dataset.step) === n);
+    });
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
   window.showStep = showStep;
@@ -875,23 +918,23 @@ const FORMSPREE_URL = 'https://formspree.io/f/mdayavqr';
       validateField('company', v => v.length >= 2),
       validateField('email',   v => emailRe.test(v)),
       validateField('phone',   v => phoneRe.test(v)),
-      validateField('size',    v => v.length > 0),
+      validateField('company_size', v => v.length > 0),
     ].every(Boolean);
   }
 
   // ── Blur validation ──
-  ['name','company','email','phone','size'].forEach(id => {
+  ['name','company','email','phone','company_size'].forEach(id => {
     const el = document.getElementById(id);
     if (!el) return;
     el.addEventListener('blur', () => {
       const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       const phoneRe = /[\d\s\+\-\(\)]{7,}/;
       const tests = {
-        name:    v => v.length >= 2,
-        company: v => v.length >= 2,
-        email:   v => emailRe.test(v),
-        phone:   v => phoneRe.test(v),
-        size:    v => v.length > 0,
+        name:         v => v.length >= 2,
+        company:      v => v.length >= 2,
+        email:        v => emailRe.test(v),
+        phone:        v => phoneRe.test(v),
+        company_size: v => v.length > 0,
       };
       if (tests[id]) validateField(id, tests[id]);
     });
