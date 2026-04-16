@@ -52,3 +52,8 @@ test('nav links point to distinct anchors', async ({ page }) => {
   await expect(agentsLink).toBeAttached();
   await expect(integrationLink).toBeAttached();
 });
+
+test('CTA "Book a Demo" links to /demo', async ({ page }) => {
+  const ctaLink = page.locator('a.closing-link');
+  await expect(ctaLink).toHaveAttribute('href', '/demo');
+});
