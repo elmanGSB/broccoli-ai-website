@@ -896,6 +896,8 @@ const CAL_URL = import.meta.env.PUBLIC_CAL_URL ?? '';
   let leadId = null;
   let selectedPillar = null;
   let calLoaded = false;
+  let leadName = '';
+  let leadEmail = '';
 
   const PILLAR_NAMES = {
     sales: '01 · Sales Empowerment',
@@ -920,7 +922,7 @@ const CAL_URL = import.meta.env.PUBLIC_CAL_URL ?? '';
     document.querySelectorAll('.progress-dot').forEach(dot => {
       dot.classList.toggle('active', parseInt(dot.dataset.step) === n);
     });
-    // Lazy-load Cal.com iframe on first entry to step 3
+    // Lazy-load Cal.com iframe on first entry to step 3 — prefill name + email
     if (n === 3 && CAL_URL && !calLoaded) {
       calLoaded = true;
       const iframe = document.querySelector('.calendar-iframe');
@@ -929,7 +931,11 @@ const CAL_URL = import.meta.env.PUBLIC_CAL_URL ?? '';
           const placeholder = document.getElementById('cal-placeholder');
           if (placeholder) placeholder.style.display = 'none';
         }, { once: true });
-        iframe.src = CAL_URL;
+        const params = new URLSearchParams();
+        if (leadName) params.set('name', leadName);
+        if (leadEmail) params.set('email', leadEmail);
+        const sep = CAL_URL.includes('?') ? '&' : '?';
+        iframe.src = params.toString() ? `${CAL_URL}${sep}${params}` : CAL_URL;
       }
     }
     if (!CAL_URL && n === 3) {
@@ -987,6 +993,9 @@ const CAL_URL = import.meta.env.PUBLIC_CAL_URL ?? '';
     const payload = Object.fromEntries(
       Object.keys(tests).map(id => [id, (document.getElementById(id)?.value ?? '').trim()])
     );
+    // Store for Cal.com prefill
+    leadName = payload.name;
+    leadEmail = payload.email;
 
     // VM write: true fire-and-forget
     fetch(BROCCOLI_API + '/api/leads', {
