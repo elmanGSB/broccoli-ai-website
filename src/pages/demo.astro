@@ -946,7 +946,7 @@ const FORMSPREE_URL = 'https://formspree.io/f/mdayavqr';
     const company = document.getElementById('company')?.value.trim() || '';
     const email   = document.getElementById('email')?.value.trim() || '';
     const phone   = document.getElementById('phone')?.value.trim() || '';
-    const company_size = document.getElementById('size')?.value || '';
+    const company_size = document.getElementById('company_size')?.value || '';
 
     const payload = { name, email, phone, company, company_size };
     const [, vmRes] = await Promise.allSettled([
