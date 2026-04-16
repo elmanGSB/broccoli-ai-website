@@ -3,6 +3,7 @@ import Layout from '../layouts/Layout.astro';
 
 const BROCCOLI_API = import.meta.env.PUBLIC_BROCCOLI_API;
 const FORMSPREE_URL = import.meta.env.PUBLIC_FORMSPREE_URL;
+const CAL_URL = import.meta.env.PUBLIC_CAL_URL ?? '';
 ---
 
 <Layout title="Book a Demo — Broccolli AI" description="Schedule a free 45-minute consultation and see how Broccolli AI can deploy specialized agents across your distribution operation.">
@@ -220,22 +221,20 @@ const FORMSPREE_URL = import.meta.env.PUBLIC_FORMSPREE_URL;
         </div>
 
         <div class="calendar-wrap">
-          <!-- TODO: Replace about:blank with real Google Calendar scheduling link when available -->
           <iframe
-            src="about:blank"
             class="calendar-iframe"
             title="Schedule a consultation"
+            allow="camera; microphone; payment"
           ></iframe>
-          <div class="calendar-placeholder">
+          <div class="calendar-placeholder" id="cal-placeholder">
             <div class="cal-placeholder-icon">📅</div>
-            <p class="cal-placeholder-text">Calendar scheduling coming soon</p>
+            <p class="cal-placeholder-text" id="cal-placeholder-text">Loading calendar…</p>
           </div>
         </div>
 
         <div class="step3-footer">
-          <button id="step3-booked" class="demo-btn" onclick="goToStep4()">
-            <span>I've booked a time →</span>
-          </button>
+          <p class="step3-skip-hint">Your calendar invite will be sent once you pick a time.</p>
+          <a href="#" id="step3-skip" class="step3-skip-link">Skip — I'll book later →</a>
         </div>
       </div>
     </section>
@@ -266,7 +265,7 @@ const FORMSPREE_URL = import.meta.env.PUBLIC_FORMSPREE_URL;
               <div class="next-num">1</div>
               <div class="next-copy">
                 <strong>Confirmation email</strong>
-                <p>Calendar invite landed in your inbox with the meeting link.</p>
+                <p>We'll send a calendar invite with the video link for your 45-minute call.</p>
               </div>
             </div>
             <div class="next-step">
@@ -690,6 +689,27 @@ const FORMSPREE_URL = import.meta.env.PUBLIC_FORMSPREE_URL;
 .step3-footer {
   margin-top: 32px;
 }
+.step3-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+.step3-skip-hint {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+.step3-skip-link {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.step3-skip-link:hover {
+  color: var(--sage);
+}
 
 /* ── Calendar ── */
 .calendar-wrap {
@@ -872,9 +892,10 @@ const FORMSPREE_URL = import.meta.env.PUBLIC_FORMSPREE_URL;
 }
 </style>
 
-<script define:vars={{ BROCCOLI_API, FORMSPREE_URL }}>
+<script define:vars={{ BROCCOLI_API, FORMSPREE_URL, CAL_URL }}>
   let leadId = null;
   let selectedPillar = null;
+  let calLoaded = false;
 
   const PILLAR_NAMES = {
     sales: '01 · Sales Empowerment',
@@ -891,19 +912,44 @@ const FORMSPREE_URL = import.meta.env.PUBLIC_FORMSPREE_URL;
       if (!el) return;
       el.style.display = i === n ? 'flex' : 'none';
       if (i === n) {
-        // Re-trigger animation
         el.style.animation = 'none';
         void el.offsetWidth;
         el.style.animation = '';
       }
     });
-    // Update progress dots
     document.querySelectorAll('.progress-dot').forEach(dot => {
       dot.classList.toggle('active', parseInt(dot.dataset.step) === n);
     });
+    // Lazy-load Cal.com iframe on first entry to step 3
+    if (n === 3 && CAL_URL && !calLoaded) {
+      calLoaded = true;
+      const iframe = document.querySelector('.calendar-iframe');
+      if (iframe) {
+        iframe.addEventListener('load', () => {
+          const placeholder = document.getElementById('cal-placeholder');
+          if (placeholder) placeholder.style.display = 'none';
+        }, { once: true });
+        iframe.src = CAL_URL;
+      }
+    }
+    if (!CAL_URL && n === 3) {
+      const txt = document.getElementById('cal-placeholder-text');
+      if (txt) txt.textContent = 'Calendar scheduling coming soon';
+    }
+    // Step 4 side effects: pillar label + checkmark animation
+    if (n === 4) {
+      const label = document.getElementById('selected-pillar-label');
+      if (label) label.textContent = PILLAR_NAMES[selectedPillar] ?? '01 · Sales Empowerment';
+      const mark = document.querySelector('.confirm-mark');
+      if (mark) { mark.classList.remove('animate'); void mark.offsetWidth; mark.classList.add('animate'); }
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
-  window.showStep = showStep;
+
+  // ── Cal.com booking confirmation ──
+  window.addEventListener('message', (e) => {
+    if (e.data?.type === 'CAL:booking_successful') showStep(4);
+  });
 
   // ── Validation helpers ──
   const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -928,52 +974,49 @@ const FORMSPREE_URL = import.meta.env.PUBLIC_FORMSPREE_URL;
   }
 
   function validateAll() {
-    return [
-      validateField('name',    tests.name),
-      validateField('company', tests.company),
-      validateField('email',   tests.email),
-      validateField('phone',   tests.phone),
-      validateField('company_size', tests.company_size),
-      validateField('website',      tests.website),
-    ].every(Boolean);
+    return Object.keys(tests).map(id => validateField(id, tests[id])).every(Boolean);
   }
 
   // ── Blur validation ──
-  ['name','company','email','phone','company_size','website'].forEach(id => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.addEventListener('blur', () => {
-      if (tests[id]) validateField(id, tests[id]);
-    });
+  Object.keys(tests).forEach(id => {
+    document.getElementById(id)?.addEventListener('blur', () => validateField(id, tests[id]));
   });
 
   // ── Step 1 submit ──
   async function submitStep1() {
-    const name    = document.getElementById('name')?.value.trim() || '';
-    const company = document.getElementById('company')?.value.trim() || '';
-    const email   = document.getElementById('email')?.value.trim() || '';
-    const phone   = document.getElementById('phone')?.value.trim() || '';
-    const company_size = document.getElementById('company_size')?.value || '';
-    const website      = document.getElementById('website')?.value.trim() || '';
+    const payload = Object.fromEntries(
+      Object.keys(tests).map(id => [id, (document.getElementById(id)?.value ?? '').trim()])
+    );
 
-    const payload = { name, email, phone, company, company_size, website };
-    const [, vmRes] = await Promise.allSettled([
-      fetch(FORMSPREE_URL, {
+    // VM write: true fire-and-forget
+    fetch(BROCCOLI_API + '/api/leads', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    }).then(async r => {
+      if (r.ok) {
+        try {
+          const data = await r.json();
+          const id = data.id;
+          if (id && /^[0-9a-f-]{1,36}$/i.test(String(id))) leadId = id;
+        } catch {}
+      } else {
+        console.error('[leads] VM API error:', r.status);
+      }
+    }).catch(err => console.error('[leads] VM API fetch failed:', err));
+
+    // Await Formspree — notification of record
+    try {
+      const res = await fetch(FORMSPREE_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: JSON.stringify(payload),
-      }),
-      fetch(BROCCOLI_API + '/api/leads', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      }),
-    ]);
-    if (vmRes.status === 'fulfilled' && vmRes.value.ok) {
-      try {
-        leadId = (await vmRes.value.json()).id;
-      } catch {}
+      });
+      if (!res.ok) console.error('[leads] Formspree error:', res.status);
+    } catch (err) {
+      console.error('[leads] Formspree fetch failed:', err);
     }
+
     showStep(2);
   }
 
@@ -1004,55 +1047,34 @@ const FORMSPREE_URL = import.meta.env.PUBLIC_FORMSPREE_URL;
 
     allCards.forEach(card => {
       card.addEventListener('click', () => {
-        allCards.forEach(c => {
-          c.classList.remove('selected');
-          c.setAttribute('aria-pressed', 'false');
-        });
+        allCards.forEach(c => { c.classList.remove('selected'); c.setAttribute('aria-pressed', 'false'); });
         card.classList.add('selected');
         card.setAttribute('aria-pressed', 'true');
         selectedPillar = card.getAttribute('data-id');
         if (continueBtn) continueBtn.disabled = false;
       });
-
       card.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          card.click();
-        }
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); card.click(); }
       });
     });
 
-    if (continueBtn) {
-      continueBtn.addEventListener('click', async () => {
-        if (!selectedPillar) return;
-        // Fire-and-forget PATCH
-        if (leadId) {
-          fetch(BROCCOLI_API + '/api/leads/' + leadId, {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ pillar: selectedPillar }),
-          }).catch(() => {});
-        }
-        showStep(3);
-      });
-    }
+    continueBtn?.addEventListener('click', () => {
+      if (!selectedPillar) return;
+      if (leadId) {
+        fetch(BROCCOLI_API + '/api/leads/' + encodeURIComponent(leadId), {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ pillar: selectedPillar }),
+        }).catch(() => {});
+      }
+      showStep(3);
+    });
   }
   setupPillarCards();
 
-  // ── Go to Step 4 ──
-  function goToStep4() {
-    const label = document.getElementById('selected-pillar-label');
-    if (label) {
-      label.textContent = PILLAR_NAMES[selectedPillar] || '01 · Sales Empowerment';
-    }
+  // ── Step 3 skip ──
+  document.getElementById('step3-skip')?.addEventListener('click', (e) => {
+    e.preventDefault();
     showStep(4);
-    // Animate checkmark
-    const mark = document.querySelector('.confirm-mark');
-    if (mark) {
-      mark.classList.remove('animate');
-      void mark.offsetWidth;
-      mark.classList.add('animate');
-    }
-  }
-  window.goToStep4 = goToStep4;
+  });
 </script>
