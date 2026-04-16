@@ -73,8 +73,8 @@ const FORMSPREE_URL = 'https://formspree.io/f/mdayavqr';
 
             <div class="field-group field-full">
               <label for="website">Company website</label>
-              <input type="url" id="website" name="website" placeholder="https://yourcompany.com" autocomplete="url" />
-              <span class="field-error" id="website-err">Please enter a valid URL (include https://)</span>
+              <input type="url" id="website" name="website" placeholder="https://yourcompany.com" autocomplete="url" required />
+              <span class="field-error" id="website-err">Please enter your website starting with https://</span>
             </div>
           </div>
 
@@ -914,7 +914,7 @@ const FORMSPREE_URL = 'https://formspree.io/f/mdayavqr';
     email:        v => emailRe.test(v),
     phone:        v => phoneRe.test(v),
     company_size: v => v.length > 0,
-    website:      v => v === '' || /^https?:\/\/.+\..+/.test(v),
+    website:      v => /^https:\/\/.+\..+/.test(v),
   };
 
   function validateField(id, test) {
@@ -934,6 +934,7 @@ const FORMSPREE_URL = 'https://formspree.io/f/mdayavqr';
       validateField('email',   tests.email),
       validateField('phone',   tests.phone),
       validateField('company_size', tests.company_size),
+      validateField('website',      tests.website),
     ].every(Boolean);
   }
 
