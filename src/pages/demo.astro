@@ -900,6 +900,16 @@ const FORMSPREE_URL = 'https://formspree.io/f/mdayavqr';
   window.showStep = showStep;
 
   // ── Validation helpers ──
+  const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const phoneRe = /[\d\s\+\-\(\)]{7,}/;
+  const tests = {
+    name:         v => v.length >= 2,
+    company:      v => v.length >= 2,
+    email:        v => emailRe.test(v),
+    phone:        v => phoneRe.test(v),
+    company_size: v => v.length > 0,
+  };
+
   function validateField(id, test) {
     const input = document.getElementById(id);
     const err = document.getElementById(id + '-err');
@@ -911,14 +921,12 @@ const FORMSPREE_URL = 'https://formspree.io/f/mdayavqr';
   }
 
   function validateAll() {
-    const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const phoneRe = /[\d\s\+\-\(\)]{7,}/;
     return [
-      validateField('name',    v => v.length >= 2),
-      validateField('company', v => v.length >= 2),
-      validateField('email',   v => emailRe.test(v)),
-      validateField('phone',   v => phoneRe.test(v)),
-      validateField('company_size', v => v.length > 0),
+      validateField('name',    tests.name),
+      validateField('company', tests.company),
+      validateField('email',   tests.email),
+      validateField('phone',   tests.phone),
+      validateField('company_size', tests.company_size),
     ].every(Boolean);
   }
 
@@ -927,15 +935,6 @@ const FORMSPREE_URL = 'https://formspree.io/f/mdayavqr';
     const el = document.getElementById(id);
     if (!el) return;
     el.addEventListener('blur', () => {
-      const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      const phoneRe = /[\d\s\+\-\(\)]{7,}/;
-      const tests = {
-        name:         v => v.length >= 2,
-        company:      v => v.length >= 2,
-        email:        v => emailRe.test(v),
-        phone:        v => phoneRe.test(v),
-        company_size: v => v.length > 0,
-      };
       if (tests[id]) validateField(id, tests[id]);
     });
   });
@@ -972,8 +971,8 @@ const FORMSPREE_URL = 'https://formspree.io/f/mdayavqr';
   // ── Form submit handler ──
   document.getElementById('contact-form')?.addEventListener('submit', async (e) => {
     e.preventDefault();
+    const btn = document.getElementById('step1-submit');
     if (!validateAll()) {
-      const btn = document.getElementById('step1-submit');
       if (btn) {
         btn.classList.remove('shake');
         void btn.offsetWidth;
@@ -982,7 +981,6 @@ const FORMSPREE_URL = 'https://formspree.io/f/mdayavqr';
       }
       return;
     }
-    const btn = document.getElementById('step1-submit');
     if (btn) {
       btn.disabled = true;
       btn.querySelector('span').textContent = 'Submitting…';
