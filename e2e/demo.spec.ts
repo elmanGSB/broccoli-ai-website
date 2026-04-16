@@ -17,7 +17,7 @@ test.describe('/demo page', () => {
   });
 
   test('Step 1 has all required fields', async ({ page }) => {
-    for (const id of ['name', 'email', 'phone', 'company', 'company_size']) {
+    for (const id of ['name', 'email', 'phone', 'company', 'company_size', 'website']) {
       await expect(page.locator(`#${id}`)).toBeVisible();
     }
   });

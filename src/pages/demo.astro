@@ -1,8 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
 
-const BROCCOLI_API = 'http://34.61.120.233:3101';
-const FORMSPREE_URL = 'https://formspree.io/f/mdayavqr';
+const BROCCOLI_API = import.meta.env.PUBLIC_BROCCOLI_API;
+const FORMSPREE_URL = import.meta.env.PUBLIC_FORMSPREE_URL;
 ---
 
 <Layout title="Book a Demo — Broccolli AI" description="Schedule a free 45-minute consultation and see how Broccolli AI can deploy specialized agents across your distribution operation.">
@@ -73,7 +73,7 @@ const FORMSPREE_URL = 'https://formspree.io/f/mdayavqr';
 
             <div class="field-group field-full">
               <label for="website">Company website</label>
-              <input type="url" id="website" name="website" placeholder="https://yourcompany.com" autocomplete="url" required />
+              <input type="url" id="website" name="website" placeholder="https://yourcompany.com" autocomplete="url" />
               <span class="field-error" id="website-err">Please enter your website starting with https://</span>
             </div>
           </div>
@@ -225,7 +225,6 @@ const FORMSPREE_URL = 'https://formspree.io/f/mdayavqr';
             src="about:blank"
             class="calendar-iframe"
             title="Schedule a consultation"
-            frameborder="0"
           ></iframe>
           <div class="calendar-placeholder">
             <div class="cal-placeholder-icon">📅</div>
@@ -707,6 +706,7 @@ const FORMSPREE_URL = 'https://formspree.io/f/mdayavqr';
   width: 100%;
   height: 100%;
   display: block;
+  border: none;
 }
 .calendar-placeholder {
   position: absolute;
