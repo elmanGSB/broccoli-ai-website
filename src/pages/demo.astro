@@ -70,6 +70,12 @@ const FORMSPREE_URL = 'https://formspree.io/f/mdayavqr';
               </select>
               <span class="field-error" id="company_size-err">Please select your company size</span>
             </div>
+
+            <div class="field-group field-full">
+              <label for="website">Company website</label>
+              <input type="url" id="website" name="website" placeholder="https://yourcompany.com" autocomplete="url" />
+              <span class="field-error" id="website-err">Please enter a valid URL (include https://)</span>
+            </div>
           </div>
 
           <button type="submit" id="step1-submit" class="demo-btn">
@@ -908,6 +914,7 @@ const FORMSPREE_URL = 'https://formspree.io/f/mdayavqr';
     email:        v => emailRe.test(v),
     phone:        v => phoneRe.test(v),
     company_size: v => v.length > 0,
+    website:      v => v === '' || /^https?:\/\/.+\..+/.test(v),
   };
 
   function validateField(id, test) {
@@ -931,7 +938,7 @@ const FORMSPREE_URL = 'https://formspree.io/f/mdayavqr';
   }
 
   // ── Blur validation ──
-  ['name','company','email','phone','company_size'].forEach(id => {
+  ['name','company','email','phone','company_size','website'].forEach(id => {
     const el = document.getElementById(id);
     if (!el) return;
     el.addEventListener('blur', () => {
@@ -946,8 +953,9 @@ const FORMSPREE_URL = 'https://formspree.io/f/mdayavqr';
     const email   = document.getElementById('email')?.value.trim() || '';
     const phone   = document.getElementById('phone')?.value.trim() || '';
     const company_size = document.getElementById('company_size')?.value || '';
+    const website      = document.getElementById('website')?.value.trim() || '';
 
-    const payload = { name, email, phone, company, company_size };
+    const payload = { name, email, phone, company, company_size, website };
     const [, vmRes] = await Promise.allSettled([
       fetch(FORMSPREE_URL, {
         method: 'POST',
