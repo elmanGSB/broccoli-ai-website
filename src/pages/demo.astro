@@ -202,6 +202,19 @@ const CAL_URL = import.meta.env.PUBLIC_CAL_URL ?? '';
           <div class="card-check" aria-hidden="true">✓</div>
         </div>
 
+        <!-- Custom input for focus area -->
+        <div id="custom-input-wrapper" style="display:none; margin-top: 2rem;">
+          <div class="field-group field-full">
+            <label for="custom_focus">Tell us more about your focus area</label>
+            <textarea
+              id="custom_focus"
+              name="custom_focus"
+              placeholder="e.g., We struggle most with managing supplier relationships and tracking pricing changes across our vendor network..."
+              rows="4"
+            ></textarea>
+          </div>
+        </div>
+
         <div class="step2-footer">
           <button id="step2-continue" class="demo-btn" disabled>
             <span>Book my consultation →</span>
@@ -1052,6 +1065,7 @@ const CAL_URL = import.meta.env.PUBLIC_CAL_URL ?? '';
   function setupPillarCards() {
     const allCards = document.querySelectorAll('.pillar-card, .custom-card');
     const continueBtn = document.getElementById('step2-continue');
+    const customInputWrapper = document.getElementById('custom-input-wrapper');
 
     allCards.forEach(card => {
       card.addEventListener('click', () => {
@@ -1059,6 +1073,14 @@ const CAL_URL = import.meta.env.PUBLIC_CAL_URL ?? '';
         card.classList.add('selected');
         card.setAttribute('aria-pressed', 'true');
         selectedPillar = card.getAttribute('data-id');
+
+        // Show/hide custom input based on selection
+        if (selectedPillar === 'custom' && customInputWrapper) {
+          customInputWrapper.style.display = 'block';
+        } else if (customInputWrapper) {
+          customInputWrapper.style.display = 'none';
+        }
+
         if (continueBtn) continueBtn.disabled = false;
       });
       card.addEventListener('keydown', (e) => {
@@ -1068,11 +1090,16 @@ const CAL_URL = import.meta.env.PUBLIC_CAL_URL ?? '';
 
     continueBtn?.addEventListener('click', () => {
       if (!selectedPillar) return;
+      const payload = { pillar: selectedPillar };
+      if (selectedPillar === 'custom') {
+        const customInput = document.getElementById('custom_focus');
+        payload.custom_focus = customInput?.value ?? '';
+      }
       if (leadId) {
         fetch(BROCCOLI_API + '/api/leads/' + encodeURIComponent(leadId), {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ pillar: selectedPillar }),
+          body: JSON.stringify(payload),
         }).catch(() => {});
       }
       showStep(3);
