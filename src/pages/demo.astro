@@ -1,9 +1,9 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import CalendarBookerWrapper from '../components/CalendarBookerWrapper';
 
 const BROCCOLI_API = import.meta.env.PUBLIC_BROCCOLI_API;
 const FORMSPREE_URL = import.meta.env.PUBLIC_FORMSPREE_URL;
-const CAL_URL = import.meta.env.PUBLIC_CAL_URL ?? '';
 ---
 
 <Layout title="Book a Demo — Broccolli AI" description="Schedule a free 45-minute consultation and see how Broccolli AI can deploy specialized agents across your distribution operation.">
@@ -234,14 +234,11 @@ const CAL_URL = import.meta.env.PUBLIC_CAL_URL ?? '';
         </div>
 
         <div class="calendar-wrap">
-          <iframe
-            class="calendar-iframe"
-            title="Schedule a consultation"
-            allow="camera; microphone; payment"
-          ></iframe>
-          <div class="calendar-placeholder" id="cal-placeholder">
-            <div class="cal-placeholder-icon">📅</div>
-            <p class="cal-placeholder-text" id="cal-placeholder-text">Loading calendar…</p>
+          <div id="calendar-container">
+            <CalendarBookerWrapper
+              client:only="react"
+              onSuccess={() => window.showStep && window.showStep(4)}
+            />
           </div>
         </div>
 
@@ -916,10 +913,9 @@ const CAL_URL = import.meta.env.PUBLIC_CAL_URL ?? '';
 }
 </style>
 
-<script define:vars={{ BROCCOLI_API, FORMSPREE_URL, CAL_URL }}>
+<script define:vars={{ BROCCOLI_API, FORMSPREE_URL }}>
   let leadId = null;
   let selectedPillar = null;
-  let calLoaded = false;
   let leadName = '';
   let leadEmail = '';
 
@@ -946,26 +942,6 @@ const CAL_URL = import.meta.env.PUBLIC_CAL_URL ?? '';
     document.querySelectorAll('.progress-dot').forEach(dot => {
       dot.classList.toggle('active', parseInt(dot.dataset.step) === n);
     });
-    // Lazy-load Cal.com iframe on first entry to step 3 — prefill name + email
-    if (n === 3 && CAL_URL && !calLoaded) {
-      calLoaded = true;
-      const iframe = document.querySelector('.calendar-iframe');
-      if (iframe) {
-        iframe.addEventListener('load', () => {
-          const placeholder = document.getElementById('cal-placeholder');
-          if (placeholder) placeholder.style.display = 'none';
-        }, { once: true });
-        const params = new URLSearchParams();
-        if (leadName) params.set('name', leadName);
-        if (leadEmail) params.set('email', leadEmail);
-        const sep = CAL_URL.includes('?') ? '&' : '?';
-        iframe.src = params.toString() ? `${CAL_URL}${sep}${params}` : CAL_URL;
-      }
-    }
-    if (!CAL_URL && n === 3) {
-      const txt = document.getElementById('cal-placeholder-text');
-      if (txt) txt.textContent = 'Calendar scheduling coming soon';
-    }
     // Step 4 side effects: pillar label + checkmark animation
     if (n === 4) {
       const label = document.getElementById('selected-pillar-label');
@@ -976,10 +952,8 @@ const CAL_URL = import.meta.env.PUBLIC_CAL_URL ?? '';
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // ── Cal.com booking confirmation ──
-  window.addEventListener('message', (e) => {
-    if (e.data?.type === 'CAL:booking_successful') showStep(4);
-  });
+  // Expose showStep to window for CalendarBooker callback
+  window.showStep = showStep;
 
   // ── Validation helpers ──
   const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
