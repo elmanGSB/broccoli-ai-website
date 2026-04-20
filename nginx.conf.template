@@ -1,0 +1,47 @@
+server {
+    listen       ${PORT};
+    listen  [::]:${PORT};
+    server_name  _;
+
+    root   /usr/share/nginx/html;
+    index  index.html;
+
+    server_tokens off;
+
+    # Security headers
+    add_header X-Frame-Options "DENY" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+    add_header Permissions-Policy "camera=(), microphone=(), geolocation=()" always;
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+    # CSP: Astro requires unsafe-inline for scripts; external: Google Fonts, Formspree, jumpersapp.com, Cal.com
+    add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self' https://formspree.io https://jumpersapp.com https://cal.com; frame-src https://cal.com; img-src 'self' data:; object-src 'none'; base-uri 'self';" always;
+
+    gzip on;
+    gzip_types text/plain text/css application/javascript application/json image/svg+xml;
+    gzip_min_length 1024;
+
+    # Astro static routes — try file, then directory, then .html extension, then 404
+    location / {
+        try_files $uri $uri/ $uri.html =404;
+    }
+
+    # Content-hashed Astro bundles — cache forever (immutable)
+    location /_astro/ {
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+        access_log off;
+    }
+
+    location /images/ {
+        expires 30d;
+        add_header Cache-Control "public";
+    }
+
+    # Health check for Cloud Run startup probes
+    location /healthz {
+        access_log off;
+        return 200 "ok\n";
+        add_header Content-Type text/plain;
+    }
+}

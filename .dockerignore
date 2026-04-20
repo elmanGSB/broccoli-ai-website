@@ -1,0 +1,14 @@
+node_modules
+.git
+.env
+.env.*
+!.env.example
+dist
+.astro
+test-results
+e2e
+docs
+todos
+.vscode
+.serena
+playwright.config.ts
