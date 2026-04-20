@@ -64,10 +64,9 @@ const CAL_URL = import.meta.env.PUBLIC_CAL_URL ?? '';
               <label for="company_size">Company size</label>
               <select id="company_size" name="company_size" required>
                 <option value="" disabled selected>Select size</option>
-                <option value="solo">Solo</option>
-                <option value="2-10">2–10 drivers</option>
-                <option value="11-50">11–50 drivers</option>
-                <option value="50+">50+ drivers</option>
+                <option value="under-100m">Less than $100M</option>
+                <option value="100-250m">$100M–$250M</option>
+                <option value="over-250m">More than $250M</option>
               </select>
               <span class="field-error" id="company_size-err">Please select your company size</span>
             </div>
