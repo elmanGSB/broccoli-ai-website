@@ -6,6 +6,7 @@
   --sage-pale: #b8ccba;
   --sage-faint: #ddeadf;
   --sage-deep: #4a6e50;
+  --sage-deep-light: #c8d9cb;
   --terra: #c67a4b;
   --terra-light: #d4956d;
   --terra-pale: #e8b896;
@@ -1331,6 +1332,30 @@ nav {
   text-transform: uppercase;
   color: rgba(250,248,244,0.28);
 }
+
+/* ─── BookerEmbed customization ─── */
+.broccoli-calendar {
+  /* BookerEmbed container customization */
+  width: 100%;
+  --cal-primary: var(--sage-deep);
+  --cal-accent: var(--sage-deep);
+  --cal-bg: var(--cream);
+  --cal-text: var(--text);
+}
+
+.broccoli-calendar .bg-sage-deep-light {
+  background-color: var(--sage-deep-light) !important;
+}
+
+.broccoli-calendar .bg-sage-deep {
+  background-color: var(--sage-deep) !important;
+  color: var(--white) !important;
+}
+
+.broccoli-calendar .hover\:bg-sage-deep-dark:hover {
+  background-color: #3d5a42 !important;
+}
+
 /* ─── RESPONSIVE ─── */
 @media (max-width: 1080px) {
   .curated-panel,
