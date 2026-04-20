@@ -17,6 +17,9 @@ server {
     # CSP: Astro requires unsafe-inline for scripts; external: Google Fonts, Formspree, jumpersapp.com, Cal.com
     add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self' https://formspree.io https://jumpersapp.com https://cal.com; frame-src https://cal.com; img-src 'self' data:; object-src 'none'; base-uri 'self';" always;
 
+    error_page 404 /404.html;
+    error_page 500 502 503 504 /500.html;
+
     gzip on;
     gzip_types text/plain text/css application/javascript application/json image/svg+xml;
     gzip_min_length 1024;
