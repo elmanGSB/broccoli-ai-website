@@ -24,7 +24,7 @@ jobs:
 
     outputs:
       image: ${{ steps.push.outputs.imageid }}
-      image-tag: ${{ env.IMAGE }}:${{ github.sha }}
+      image-digest: ${{ steps.push.outputs.digest }}
 
     steps:
       - name: Checkout
@@ -83,7 +83,7 @@ jobs:
         with:
           service: ${{ env.SERVICE }}
           region: ${{ env.REGION }}
-          image: ${{ needs.build-and-push.outputs.image-tag }}
+          image: ${{ env.IMAGE }}:${{ github.sha }}
           flags: >-
             --allow-unauthenticated
             --concurrency=1000
