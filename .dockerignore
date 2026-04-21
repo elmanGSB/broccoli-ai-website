@@ -13,4 +13,3 @@ todos
 .vscode
 .serena
 playwright.config.ts
-bun.lock
