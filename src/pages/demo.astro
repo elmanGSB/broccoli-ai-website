@@ -226,7 +226,7 @@ const FORMSPREE_URL = import.meta.env.PUBLIC_FORMSPREE_URL;
 
     <!-- ── STEP 3: Calendar scheduling ── -->
     <section id="step3" class="demo-step" style="display:none;">
-      <div class="demo-inner">
+      <div class="demo-inner demo-inner--schedule">
         <div class="demo-header">
           <span class="demo-eyebrow">Schedule</span>
           <h2 class="demo-headline">Pick a time that <em>works for you.</em></h2>
@@ -244,7 +244,6 @@ const FORMSPREE_URL = import.meta.env.PUBLIC_FORMSPREE_URL;
 
         <div class="step3-footer">
           <p class="step3-skip-hint">Your calendar invite will be sent once you pick a time.</p>
-          <a href="#" id="step3-skip" class="step3-skip-link">Skip — I'll book later →</a>
         </div>
       </div>
     </section>
@@ -391,6 +390,9 @@ const FORMSPREE_URL = import.meta.env.PUBLIC_FORMSPREE_URL;
 .demo-inner {
   width: 100%;
   max-width: 720px;
+}
+.demo-inner--schedule {
+  max-width: 1100px;
 }
 .demo-inner--confirm {
   max-width: 600px;
@@ -721,27 +723,24 @@ const FORMSPREE_URL = import.meta.env.PUBLIC_FORMSPREE_URL;
   color: var(--text-muted);
   line-height: 1.5;
 }
-.step3-skip-link {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-muted);
-  text-decoration: none;
-  transition: color 0.2s;
-}
-.step3-skip-link:hover {
-  color: var(--sage);
-}
-
 /* ── Calendar ── */
 .calendar-wrap {
   position: relative;
   width: 100%;
-  height: 540px;
+  height: 720px;
   border-radius: 18px;
   border: 1.5px solid rgba(107,143,113,0.18);
   background: var(--white);
   overflow: hidden;
   box-shadow: 0 4px 20px rgba(92,64,51,0.08);
+}
+#calendar-container,
+#calendar-container > div,
+#calendar-container iframe {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border: none;
 }
 .calendar-iframe {
   width: 100%;
@@ -1093,9 +1092,4 @@ const FORMSPREE_URL = import.meta.env.PUBLIC_FORMSPREE_URL;
   }
   setupPillarCards();
 
-  // ── Step 3 skip ──
-  document.getElementById('step3-skip')?.addEventListener('click', (e) => {
-    e.preventDefault();
-    showStep(4);
-  });
 </script>

@@ -1,11 +1,5 @@
-declare global {
-  interface Window {
-    Cal?: any;
-  }
-}
-
-import React from 'react';
-import { BookerEmbed } from '@calcom/atoms';
+import { useEffect } from 'react';
+import Cal, { getCalApi } from '@calcom/embed-react';
 
 interface CalendarBookerProps {
   name: string;
@@ -14,31 +8,31 @@ interface CalendarBookerProps {
 }
 
 export default function CalendarBooker({ name, email, onSuccess }: CalendarBookerProps) {
+  useEffect(() => {
+    (async () => {
+      const cal = await getCalApi();
+      cal('ui', {
+        theme: 'light',
+        styles: { branding: { brandColor: '#6b8f71' } },
+        hideEventTypeDetails: false,
+      });
+      cal('on', {
+        action: 'bookingSuccessful',
+        callback: () => onSuccess(),
+      });
+    })();
+  }, [onSuccess]);
+
   return (
-    <div className="main">
-      <BookerEmbed
-        username="elman"
-        eventSlug="free-ai-consultation"
-        defaultFormValues={{
-          name: name || '',
-          email: email || '',
-        }}
-        customClassNames={{
-          bookerContainer: 'broccoli-calendar',
-          datePickerCustomClassNames: {
-            datePickerDatesActive: 'bg-sage-deep-light',
-          },
-          availableTimeSlotsCustomClassNames: {
-            availableTimes: 'bg-sage-deep-light',
-          },
-          confirmStep: {
-            confirmButton: 'bg-sage-deep hover:bg-sage-deep-dark',
-          },
-        }}
-        onCreateBookingSuccess={() => {
-          onSuccess();
-        }}
-      />
-    </div>
+    <Cal
+      calLink="elman/aiconsultation"
+      config={{
+        layout: 'column_view',
+        theme: 'light',
+        name: name || '',
+        email: email || '',
+      }}
+      style={{ width: '100%', height: '100%', overflow: 'auto' }}
+    />
   );
 }
