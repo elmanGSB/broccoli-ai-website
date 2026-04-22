@@ -8,14 +8,18 @@ server {
 
     server_tokens off;
 
+    # Cloud Run / proxy: don't bake internal $server_port (8080) or scheme into 301s
+    absolute_redirect off;
+    port_in_redirect off;
+
     # Security headers
     add_header X-Frame-Options "DENY" always;
     add_header X-Content-Type-Options "nosniff" always;
     add_header Referrer-Policy "strict-origin-when-cross-origin" always;
     add_header Permissions-Policy "camera=(), microphone=(), geolocation=()" always;
     add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
-    # CSP: Astro requires unsafe-inline for scripts; external: Google Fonts, Formspree, jumpersapp.com, Cal.com
-    add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self' https://formspree.io https://jumpersapp.com https://cal.com; frame-src https://cal.com; img-src 'self' data:; object-src 'none'; base-uri 'self';" always;
+    # CSP: Astro requires unsafe-inline for scripts; external: Google Fonts, Formspree, jumpersapp.com, Cal.com (incl. app.cal.com for embed.js)
+    add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://app.cal.com https://cal.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self' https://formspree.io https://jumpersapp.com https://cal.com https://app.cal.com; frame-src https://cal.com https://app.cal.com; img-src 'self' data: https://cal.com https://app.cal.com; object-src 'none'; base-uri 'self';" always;
 
     error_page 404 /404.html;
     error_page 500 502 503 504 /500.html;
