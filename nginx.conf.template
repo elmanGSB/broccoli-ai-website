@@ -8,6 +8,10 @@ server {
 
     server_tokens off;
 
+    # Cloud Run / proxy: don't bake internal $server_port (8080) or scheme into 301s
+    absolute_redirect off;
+    port_in_redirect off;
+
     # Security headers
     add_header X-Frame-Options "DENY" always;
     add_header X-Content-Type-Options "nosniff" always;
